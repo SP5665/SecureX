@@ -1,10 +1,9 @@
 /* blur.css */
 .blurred-message {
   filter: blur(6px);
-  pointer-events: none;
+  pointer-events: auto; /* allows clicking the blurred text */
   user-select: none;
   display: inline-block;
-  transition: filter 0.25s ease;
 }
 
 .reveal-btn, .report-btn {

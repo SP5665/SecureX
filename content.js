@@ -53,16 +53,18 @@ function findMessageNodes() {
 
 // Find sender (heuristic)
 function findSenderForNode(node) {
-    let el = node;
-    for (let i = 0; i < 6 && el; i++) {
-        const possible = el.closest("div[role='listitem'], div[role='row'], li, div");
-        if (!possible) { el = el.parentElement; continue; }
-        const nameNode = possible.querySelector("a, strong, h3, span[dir='auto']");
-        if (nameNode && nameNode.innerText && nameNode.innerText.length < 60) return nameNode.innerText.trim();
-        el = possible.parentElement;
+    const messageRow = node.closest("div[role='listitem'], div[role='row']");
+    if (!messageRow) return "Unknown";
+
+    // Get the sender link (profile link)
+    const senderLink = messageRow.querySelector("a[href^='/']");
+    if (senderLink && senderLink.innerText.trim().length > 0) {
+        return senderLink.innerText.trim();
     }
+
     return "Unknown";
 }
+
 
 // Find timestamp (fallback)
 function findTimestampForNode(node) {
@@ -88,34 +90,10 @@ const revealBtn = document.createElement("button");
 revealBtn.className = "reveal-btn";
 revealBtn.innerText = "Reveal";
 
-let isRevealed = false;
-
-revealBtn.addEventListener("click", () => {
-    
-    if (!isRevealed) {
-        // Unblur message
+    // Toggle blur when clicking the message itself
+    blurred.addEventListener("click", () => {
         blurred.classList.remove("blurred-message");
-
-        // Change button to hide
-        revealBtn.innerText = "Hide";
-
-        // Show popup
-        popup.style.display = "flex";
-
-        isRevealed = true;
-    } 
-    else {
-        // Blur again
-        blurred.classList.add("blurred-message");
-
-        // Hide popup
-        popup.style.display = "none";
-
-        revealBtn.innerText = "Reveal";
-        isRevealed = false;
-    }
-});
-
+    });
 
     const reportBtn = document.createElement("button");
     reportBtn.className = "report-btn";
@@ -133,6 +111,7 @@ revealBtn.addEventListener("click", () => {
             snippet
         };
 
+        
         // Wait for jsPDF to load
         waitForJsPDF().then(() => {
             window.generateCyberReport(reportData).then((filename) => {
@@ -147,6 +126,9 @@ revealBtn.addEventListener("click", () => {
                     }
                 });
                 alert("Report generated: " + filename);
+
+                // Redirect to cyber crime reporting website
+                window.open("https://cybercrime.gov.in/", "_blank"); 
             }).catch(err => {
                 console.error("PDF generation failed", err);
                 alert("Failed to generate PDF.");
@@ -154,7 +136,7 @@ revealBtn.addEventListener("click", () => {
         });
     });
 
-    btnContainer.appendChild(revealBtn);
+    // btnContainer.appendChild(revealBtn);
     btnContainer.appendChild(reportBtn);
 
     wrapper.appendChild(blurred);
