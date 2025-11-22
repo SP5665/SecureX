@@ -1,17 +1,11 @@
-setInterval(() => {
-    scanMessages();
-}, 1500);
-
-
 function scanMessages() {
     let selectors = [
-        "p", 
+        "p",
         "span",
         "div",
-        // Instagram message bubble selectors
-        "div._acrb",  // sent messages
-        "div._acrc",  // received messages
-        "h1, h2, h3"  // fallback
+        "div._acrb",  // Instagram sent messages
+        "div._acrc",  // Instagram received messages
+        "h1, h2, h3"
     ];
 
     const messages = document.querySelectorAll(selectors.join(","));
