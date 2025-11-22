@@ -1,47 +1,28 @@
-// PDF Report Generator
-function generatePDF(threatMessage, senderInfo = "Unknown User") {
-    // Load jsPDF library dynamically
-    const script = document.createElement("script");
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+// Basic keyword model
+const THREAT_KEYWORDS = [
+  "kill", "rape", "murder", "blackmail",
+  "beat you", "hurt you", "leak", "suicide"
+];
 
-    script.onload = () => {
-        const { jsPDF } = window.jspdf;
+// LISTEN FOR MESSAGES FROM content.js
+chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
-        const doc = new jsPDF();
+    if (req.type === "CHECK_THREAT") {
+        let lower = req.message.toLowerCase();
+        
+        let isThreat = THREAT_KEYWORDS.some(word => lower.includes(word));
 
-        doc.setFont("Helvetica", "normal");
+        sendResponse({ isThreat });
+        return true;
+    }
 
-        doc.setFontSize(18);
-        doc.text("SecureX Cyber Threat Report", 20, 20);
-
-        doc.setFontSize(12);
-        doc.text("Generated Automatically by SecureX", 20, 30);
-        doc.text(`Date: ${new Date().toLocaleString()}`, 20, 40);
-
-        doc.setFontSize(14);
-        doc.text("Perpetrator Information:", 20, 60);
-
-        doc.setFontSize(12);
-        doc.text(`Sender: ${senderInfo}`, 20, 70);
-
-        doc.setFontSize(14);
-        doc.text("Threat Message:", 20, 90);
-
-        doc.setFontSize(12);
-        doc.text(doc.splitTextToSize(threatMessage, 170), 20, 100);
-
-        doc.setFontSize(14);
-        doc.text("Severity:", 20, 140);
-
-        doc.setFontSize(12);
-        doc.text("HIGH – Requires immediate review.", 20, 150);
-
-        // Save PDF
-        doc.save("SecureX_Report.pdf");
-
-        // Optionally send to cyber crime API endpoint
-        // sendToCyberCrime(doc.output("blob"));
-    };
-
-    document.body.appendChild(script);
-}
+    if (req.type === "OPEN_OPTIONS") {
+        chrome.windows.create({
+            url: chrome.runtime.getURL("popup.html") + 
+                 `?msg=${encodeURIComponent(req.message)}&sender=${req.sender}`,
+            type: "popup",
+            width: 380,
+            height: 500
+        });
+    }
+});

@@ -1,42 +1,40 @@
-// Monitor new messages
+// Mutation Observer - monitors new messages
 const observer = new MutationObserver(() => {
-    let messages = document.querySelectorAll('.message, .msg, div');  
+    let messages = document.querySelectorAll("div, .message, .msg");
 
     messages.forEach(msg => {
-        if (!msg.dataset.securexProcessed) {
-            msg.dataset.securexProcessed = "true";
+        if (msg.dataset.securexProcessed) return;
+        msg.dataset.securexProcessed = "true";
 
-            let text = msg.innerText;
+        let text = msg.innerText?.trim();
+        if (!text) return;
 
-            // Send message to threat model
-            chrome.runtime.sendMessage(
-                { type: "CHECK_THREAT", message: text },
-                (response) => {
-                    if (response && response.isThreat) {
-                        
-                        // Blur message
-                        msg.style.filter = "blur(8px)";
-                        msg.style.position = "relative";
+        chrome.runtime.sendMessage(
+            { type: "CHECK_THREAT", message: text },
+            (response) => {
+                if (!response || !response.isThreat) return;
 
-                        // Add popup button
-                        let btn = document.createElement("button");
-                        btn.innerText = "⚠ Threat Detected - Options";
-                        btn.className = "securex-btn";
-                        
-                        btn.onclick = () => {
-                            chrome.runtime.sendMessage({
-                                type: "OPTIONS",
-                                message: text
-                            });
-                        };
+                // Blur message
+                msg.style.filter = "blur(8px)";
+                msg.style.position = "relative";
 
-                        msg.appendChild(btn);
-                    }
-                }
-            );
-        }
+                // Add option button
+                let btn = document.createElement("button");
+                btn.innerText = "⚠ Threat Detected — Options";
+                btn.className = "securex-btn";
+
+                btn.onclick = () => {
+                    chrome.runtime.sendMessage({
+                        type: "OPEN_OPTIONS",
+                        message: text,
+                        sender: "Unknown User"
+                    });
+                };
+
+                msg.appendChild(btn);
+            }
+        );
     });
 });
 
-// Start observing
 observer.observe(document.body, { childList: true, subtree: true });
