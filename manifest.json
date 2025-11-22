@@ -2,10 +2,10 @@
   "manifest_version": 3,
   "name": "SecureX - Real Time Chat Protector",
   "version": "1.0",
-  "description": "Detects threatening messages, blurs them, and generates cybercrime-ready reports.",
-  
-  "permissions": ["activeTab", "scripting"],
-  
+  "description": "AI-based threat detection and reporting in chats",
+
+  "permissions": ["activeTab", "scripting", "storage", "tabs"],
+
   "action": {
     "default_popup": "popup.html"
   },
@@ -19,13 +19,6 @@
       "matches": ["<all_urls>"],
       "js": ["content.js"],
       "css": ["style.css"]
-    }
-  ],
-
-  "web_accessible_resources": [
-    {
-      "resources": ["libs/jspdf.umd.min.js"],
-      "matches": ["<all_urls>"]
     }
   ]
 }

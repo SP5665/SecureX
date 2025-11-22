@@ -1,4 +1,5 @@
-// Mutation Observer - monitors new messages
+// content.js — Detects & blurs threats inside chats
+
 const observer = new MutationObserver(() => {
     let messages = document.querySelectorAll("div, .message, .msg");
 
@@ -11,21 +12,15 @@ const observer = new MutationObserver(() => {
 
         chrome.runtime.sendMessage(
             { type: "CHECK_THREAT", message: text },
-            (response) => {
 
-                // SAFETY CHECK (prevents "Extension context invalidated")
-                if (chrome.runtime.lastError || !response) {
-                    console.warn("SecureX: Background not ready.");
-                    return;
-                }
+            (response) => {
+                if (chrome.runtime.lastError || !response) return;
 
                 if (!response.isThreat) return;
 
-                // Blur message
                 msg.style.filter = "blur(8px)";
                 msg.style.position = "relative";
 
-                // Create button
                 let btn = document.createElement("button");
                 btn.innerText = "⚠ Threat Detected - Options";
                 btn.className = "securex-btn";
