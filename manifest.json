@@ -1,24 +1,42 @@
 {
   "manifest_version": 3,
-  "name": "SecureX - Real Time Chat Protector",
+  "name": "SecureX",
   "version": "1.0",
-  "description": "AI-based threat detection and reporting in chats",
-
-  "permissions": ["activeTab", "scripting", "storage", "tabs"],
-
-  "action": {
-    "default_popup": "popup.html"
-  },
-
+  "description": "Detects threatening messages in Instagram Web DMs, blurs them and helps create a PDF report.",
+  "permissions": ["storage", "scripting", "activeTab"],
+  "host_permissions": ["https://www.instagram.com/*"],
   "background": {
     "service_worker": "background.js"
   },
-
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon.jpg",
+      "48": "icons/icon.jpg",
+      "128": "icons/icon.jpg"
+    }
+  },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["style.css"]
+      "matches": ["https://www.instagram.com/*"],
+      "js": [
+        "libs/jspdf.umd.min.js",
+        "utils/pdf_generator.js",
+        "content.js"
+      ],
+      "css": ["styles/blur.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon.jpg",
+    "48": "icons/icon.jpg",
+    "128": "icons/icon.jpg"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["libs/jspdf.umd.min.js"],
+      "matches": ["<all_urls>"]
     }
   ]
 }

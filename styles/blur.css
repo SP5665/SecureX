@@ -1,0 +1,36 @@
+/* blur.css */
+.blurred-message {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+  display: inline-block;
+  transition: filter 0.25s ease;
+}
+
+.reveal-btn, .report-btn {
+  margin-left: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.reveal-btn {
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+}
+
+.report-btn {
+  background: #d9534f;
+  color: #fff;
+  margin-left: 6px;
+}
+
+.cyber-report-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  font-size: 12px;
+}

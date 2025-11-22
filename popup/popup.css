@@ -1,0 +1,9 @@
+/* popup.css */
+body { font-family: Arial, sans-serif; width: 300px; padding: 12px; margin: 0; }
+h3 { margin: 0 0 8px 0; }
+.container { display: flex; flex-direction: column; gap: 10px; }
+.history { margin-top: 8px; }
+#reportsList { list-style: none; padding-left: 0; max-height: 160px; overflow-y: auto; }
+#reportsList li { padding: 6px; border-bottom: 1px solid #eee; font-size: 12px; }
+button { padding: 6px 8px; border-radius: 4px; cursor: pointer; }
+#clearReports { background: #d9534f; color: #fff; border: none; }
