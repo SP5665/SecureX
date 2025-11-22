@@ -1,16 +1,10 @@
 {
   "manifest_version": 3,
-
   "name": "SecureX - Real Time Chat Protector",
   "version": "1.0",
   "description": "AI-based real-time threat detection, message blurring, and instant cybercrime reporting.",
 
-  "permissions": [
-    "activeTab",
-    "scripting",
-    "storage",
-    "tabs"
-  ],
+  "permissions": ["activeTab", "scripting", "storage", "tabs"],
 
   "host_permissions": [
     "https://www.facebook.com/*",
@@ -20,16 +14,6 @@
     "https://instagram.com/*",
     "<all_urls>"
   ],
-
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "icons/icon16.png",
-      "32": "icons/icon32.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
-    }
-  },
 
   "background": {
     "service_worker": "background.js"
@@ -48,12 +32,5 @@
       "js": ["content.js"],
       "css": ["style.css"]
     }
-  ],
-
-  "icons": {
-    "16": "icons/icon16.png",
-    "32": "icons/icon32.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
-  }
+  ]
 }
