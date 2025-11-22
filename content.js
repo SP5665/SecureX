@@ -37,16 +37,18 @@ function findMessageNodes() {
 
 // Find sender (heuristic)
 function findSenderForNode(node) {
-    let el = node;
-    for (let i = 0; i < 6 && el; i++) {
-        const possible = el.closest("div[role='listitem'], div[role='row'], li, div");
-        if (!possible) { el = el.parentElement; continue; }
-        const nameNode = possible.querySelector("a, strong, h3, span[dir='auto']");
-        if (nameNode && nameNode.innerText && nameNode.innerText.length < 60) return nameNode.innerText.trim();
-        el = possible.parentElement;
+    const messageRow = node.closest("div[role='listitem'], div[role='row']");
+    if (!messageRow) return "Unknown";
+
+    // Get the sender link (profile link)
+    const senderLink = messageRow.querySelector("a[href^='/']");
+    if (senderLink && senderLink.innerText.trim().length > 0) {
+        return senderLink.innerText.trim();
     }
+
     return "Unknown";
 }
+
 
 // Find timestamp (fallback)
 function findTimestampForNode(node) {
@@ -69,12 +71,9 @@ function injectControlsFor(node) {
     const btnContainer = document.createElement("span");
     btnContainer.className = "cyber-report-banner";
 
-    const revealBtn = document.createElement("button");
-    revealBtn.className = "reveal-btn";
-    // revealBtn.innerText = "Show";
-    revealBtn.addEventListener("click", () => {
+    // Toggle blur when clicking the message itself
+    blurred.addEventListener("click", () => {
         blurred.classList.remove("blurred-message");
-        revealBtn.remove();
     });
 
     const reportBtn = document.createElement("button");
@@ -93,6 +92,7 @@ function injectControlsFor(node) {
             snippet
         };
 
+        
         // Wait for jsPDF to load
         waitForJsPDF().then(() => {
             window.generateCyberReport(reportData).then((filename) => {
@@ -107,6 +107,9 @@ function injectControlsFor(node) {
                     }
                 });
                 alert("Report generated: " + filename);
+
+                // Redirect to cyber crime reporting website
+                window.open("https://cybercrime.gov.in/", "_blank"); 
             }).catch(err => {
                 console.error("PDF generation failed", err);
                 alert("Failed to generate PDF.");
@@ -114,7 +117,7 @@ function injectControlsFor(node) {
         });
     });
 
-    btnContainer.appendChild(revealBtn);
+    // btnContainer.appendChild(revealBtn);
     btnContainer.appendChild(reportBtn);
 
     wrapper.appendChild(blurred);
