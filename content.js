@@ -12,7 +12,7 @@ const observer = new MutationObserver(() => {
             chrome.runtime.sendMessage(
                 { type: "CHECK_THREAT", message: text },
                 (response) => {
-                    if (response.isThreat) {
+                    if (response && response.isThreat) {
                         
                         // Blur message
                         msg.style.filter = "blur(8px)";
