@@ -1,5 +1,8 @@
 // content.js
 
+// Tracks processed message nodes safely
+const processedNodes = new WeakSet();
+
 // Inject jsPDF into the page
 const jsPDFScript = document.createElement("script");
 jsPDFScript.src = chrome.runtime.getURL("libs/jspdf.umd.min.js");
@@ -13,10 +16,10 @@ const KEYWORDS = [
     "kill you","i will kill","i'll kill","murder you","i will murder","i'll murder","die","i'll find you","i will find you","i'll come","i will come",
     "send money","pay me","transfer","or else","leak your pics","i have your pictures","leak your photos","pay up",
     "rape you","i will rape","i'll rape","sexual","expose yourself","send nudes or else",
-    "hurt you","stab you","beat you","attack you","burn you"
+    "hurt you","stab you","beat you","attack you","burn you",
 ];
 
-const SCAN_INTERVAL_MS = 1500;
+const SCAN_INTERVAL_MS = 5600;
 
 // Check if text is a threat
 function isThreatText(text) {
@@ -31,9 +34,22 @@ function isThreatText(text) {
 
 // Find message nodes in Instagram DMs
 function findMessageNodes() {
-    const nodes = Array.from(document.querySelectorAll("div[role='button'] span, div[role='dialog'] span, div[role='main'] span"));
-    return nodes.filter(n => n.innerText && n.innerText.trim().length > 0);
+    const possibleNodes = [
+        "div[role='none'] span",      // Instagram message spans
+        "div.x1lliihq span",          // message text spans
+        "div.xz9dl7a span",           // fallback for IG updates
+        "div[dir='auto'] span"        // often used for message text
+    ];
+
+    const nodes = Array.from(document.querySelectorAll(possibleNodes.join(",")));
+
+    return nodes.filter(n => 
+        n.innerText && 
+        n.innerText.trim().length > 0 &&
+        !n.dataset.cyberProcessed
+    );
 }
+
 
 // Find sender (heuristic)
 function findSenderForNode(node) {
@@ -120,7 +136,7 @@ function injectControlsFor(node) {
     wrapper.appendChild(blurred);
     wrapper.appendChild(btnContainer);
 
-    node.innerHTML = "";
+      while (node.firstChild) node.firstChild.remove();
     node.appendChild(wrapper);
 }
 
@@ -147,7 +163,23 @@ function waitForJsPDF() {
 }
 
 // Start scanning periodically
-setInterval(scanAndProcess, SCAN_INTERVAL_MS);
+// Run immediately once
+function startControlledLoop() {
+    // Run immediately
+    scanAndProcess();
+   
+      setTimeout(() => {
+        startControlledLoop();
+    }, 1500);  
+    // Then wait 2 hours (7200000 ms)
+    setTimeout(() => {
+        startControlledLoop();
+    }, 72000);
+}
+
+// Start the loop
+startControlledLoop();
+
 
 // Listen to messages from popup
 chrome.runtime.onMessage.addListener((msg) => {
