@@ -97,3 +97,13 @@ function saveIncident(text) {
         chrome.storage.local.set({ securexIncidents: incidents });
     });
 }
+// TEST — run threat detection automatically on page load
+console.log("Testing SecureX threat detection...");
+testThreats();
+
+function testThreats() {
+    detectThreat("I will kill you");
+    detectThreat("You are stupid");
+    detectThreat("I will harm you");
+    detectThreat("Have a nice day");
+}
