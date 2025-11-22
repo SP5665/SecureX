@@ -12,22 +12,28 @@ const observer = new MutationObserver(() => {
         chrome.runtime.sendMessage(
             { type: "CHECK_THREAT", message: text },
             (response) => {
-                if (!response || !response.isThreat) return;
+
+                // SAFETY CHECK (prevents "Extension context invalidated")
+                if (chrome.runtime.lastError || !response) {
+                    console.warn("SecureX: Background not ready.");
+                    return;
+                }
+
+                if (!response.isThreat) return;
 
                 // Blur message
                 msg.style.filter = "blur(8px)";
                 msg.style.position = "relative";
 
-                // Add option button
+                // Create button
                 let btn = document.createElement("button");
-                btn.innerText = "⚠ Threat Detected — Options";
+                btn.innerText = "⚠ Threat Detected - Options";
                 btn.className = "securex-btn";
 
                 btn.onclick = () => {
                     chrome.runtime.sendMessage({
-                        type: "OPEN_OPTIONS",
-                        message: text,
-                        sender: "Unknown User"
+                        type: "OPTIONS",
+                        message: text
                     });
                 };
 
