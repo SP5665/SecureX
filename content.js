@@ -1,6 +1,8 @@
 // ---------------------------
 // SecureX – Content Script
 // ---------------------------
+console.log("SecureX content script loaded on:", window.location.href);
+alert("SecureX is active on this page!");
 
 // STEP 1: Observe the page for new messages
 const observer = new MutationObserver(() => {
