@@ -80,18 +80,42 @@ function injectControlsFor(node) {
 
     const blurred = document.createElement("span");
     blurred.className = "blurred-message";
-    blurred.innerText = originalText;
+   // blurred.innerText = originalText;
 
     const btnContainer = document.createElement("span");
     btnContainer.className = "cyber-report-banner";
+const revealBtn = document.createElement("button");
+revealBtn.className = "reveal-btn";
+revealBtn.innerText = "Reveal";
 
-    const revealBtn = document.createElement("button");
-    revealBtn.className = "reveal-btn";
-    // revealBtn.innerText = "Show";
-    revealBtn.addEventListener("click", () => {
+let isRevealed = false;
+
+revealBtn.addEventListener("click", () => {
+    
+    if (!isRevealed) {
+        // Unblur message
         blurred.classList.remove("blurred-message");
-        revealBtn.remove();
-    });
+
+        // Change button to hide
+        revealBtn.innerText = "Hide";
+
+        // Show popup
+        popup.style.display = "flex";
+
+        isRevealed = true;
+    } 
+    else {
+        // Blur again
+        blurred.classList.add("blurred-message");
+
+        // Hide popup
+        popup.style.display = "none";
+
+        revealBtn.innerText = "Reveal";
+        isRevealed = false;
+    }
+});
+
 
     const reportBtn = document.createElement("button");
     reportBtn.className = "report-btn";
@@ -135,9 +159,78 @@ function injectControlsFor(node) {
 
     wrapper.appendChild(blurred);
     wrapper.appendChild(btnContainer);
+  //==========pop up feature==========
+  // === ADD POPUP HERE ===
+
+// Create popup container
+const popup = document.createElement("div");
+popup.className = "cyber-action-popup";
+popup.style.display = "none";
+
+// Popup buttons
+const blockBtn = document.createElement("button");
+blockBtn.innerText = "Block Sender";
+blockBtn.className = "popup-btn block";
+
+const saveBtn = document.createElement("button");
+saveBtn.innerText = "Save Evidence";
+saveBtn.className = "popup-btn save";
+
+const deleteBtn = document.createElement("button");
+deleteBtn.innerText = "Delete Message";
+deleteBtn.className = "popup-btn delete";
+
+// Append popup buttons
+popup.appendChild(blockBtn);
+popup.appendChild(saveBtn);
+popup.appendChild(deleteBtn);
+
+// Append popup to wrapper
+wrapper.appendChild(popup);
+
+// Toggle popup when reveal button is clicked
+revealBtn.addEventListener("click", () => {
+    popup.style.display = popup.style.display === "flex" ? "none" : "flex";
+});
+
+// BLOCK SENDER
+blockBtn.addEventListener("click", () => {
+    const offender = findSenderForNode(node);
+    alert("Sender blocked: " + offender);
+    popup.style.display = "none";
+});
+
+// SAVE EVIDENCE
+saveBtn.addEventListener("click", () => {
+    const sender = findSenderForNode(node);
+    const timestamp = findTimestampForNode(node);
+    const snippet = originalText.length > 300 ? originalText.slice(0, 300) + "..." : originalText;
+
+    const reportData = {
+        offender: sender,
+        message: originalText,
+        timestamp,
+        chatUrl: window.location.href,
+        snippet
+    };
+
+    waitForJsPDF().then(() => {
+        window.generateCyberReport(reportData).then((filename) => {
+            alert("Evidence saved: " + filename);
+            popup.style.display = "none";
+        });
+    });
+});
+
+// DELETE MESSAGE
+deleteBtn.addEventListener("click", () => {
+    node.remove();
+    popup.style.display = "none";
+});
 
       while (node.firstChild) node.firstChild.remove();
     node.appendChild(wrapper);
+  
 }
 
 // Scan loop

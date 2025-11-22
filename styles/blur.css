@@ -34,3 +34,26 @@
   margin-left: 8px;
   font-size: 12px;
 }
+.cyber-action-popup {
+    position: relative;
+    margin-top: 5px;
+    padding: 8px;
+    background: #222;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 140px;
+}
+
+.popup-btn {
+    padding: 6px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+}
+
+.popup-btn.block { background: #d9534f; }
+.popup-btn.save { background: #0275d8; }
+.popup-btn.delete { background: #5bc0de; }
