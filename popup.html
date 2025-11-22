@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SecureX Options</title>
-    <script src="popup.js"></script>
+    <title>SecureX</title>
+    <style>
+        body { font-family: Arial; padding: 10px; width: 260px; }
+        #logs { max-height: 180px; overflow-y: auto; margin-bottom: 10px; }
+        .item { padding: 6px; background: #f4f4f4; margin: 5px 0; border-radius: 4px; }
+        button { padding: 8px; width: 100%; cursor: pointer; }
+    </style>
 </head>
-<body style="font-family: Arial; padding: 15px;">
 
-<h2>⚠ Threat Options</h2>
-<p id="message"></p>
+<body>
+    <h2>SecureX Logs</h2>
+    <div id="logs"></div>
+    <button id="exportBtn">Export Report</button>
 
-<button id="report">Send Report to Cyber Crime (PDF)</button>
-<button id="block">Block Sender & Delete Message</button>
-
+    <script src="popup.js"></script>
 </body>
 </html>

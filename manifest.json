@@ -1,5 +1,6 @@
 {
   "manifest_version": 3,
+
   "name": "SecureX - Real Time Chat Protector",
   "version": "1.0",
   "description": "AI-based real-time threat detection, message blurring, and instant cybercrime reporting.",
@@ -17,6 +18,10 @@
 
   "background": {
     "service_worker": "background.js"
+  },
+
+  "action": {
+    "default_popup": "popup.html"
   },
 
   "content_scripts": [
