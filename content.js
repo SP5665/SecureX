@@ -87,7 +87,7 @@ function injectControlsFor(node) {
 
     const revealBtn = document.createElement("button");
     revealBtn.className = "reveal-btn";
-    revealBtn.innerText = "Show";
+    // revealBtn.innerText = "Show";
     revealBtn.addEventListener("click", () => {
         blurred.classList.remove("blurred-message");
         revealBtn.remove();
@@ -95,7 +95,7 @@ function injectControlsFor(node) {
 
     const reportBtn = document.createElement("button");
     reportBtn.className = "report-btn";
-    reportBtn.innerText = "Report";
+    // reportBtn.innerText = "Report";
     reportBtn.addEventListener("click", () => {
         const sender = findSenderForNode(node);
         const timestamp = findTimestampForNode(node);
