@@ -79,39 +79,31 @@ function injectControlsFor(node) {
     btnContainer.appendChild(revealBtn);
     btnContainer.appendChild(reportBtn);
 
-    // ================================
-    // ✔ FIXED UNBLUR FUNCTION
-    // ================================
- revealBtn.addEventListener("click", () => {
-        // CHANGE: Added debugging console logs to verify the unblur process
-        console.log("Reveal button clicked - attempting to unblur");  // Debugging log (NEW)
-        // ---- UNBLUR THE MESSAGE ----
-        blurred.style.filter = "none";  // Remove blur (this should unblur the text)
-        blurred.style.userSelect = "auto";  // Allow selection now
-        console.log("Blur removed, text should be visible now"); 
-        // ---- UNBLUR THE MESSAGE ----
-  
-
+    // Toggle blur when clicking the message itself
+    blurred.addEventListener("click", () => {
+        blurred.classList.remove("blurred-message");
         // ---- ALERT MENU ----
-        const choice = prompt(
-            "⚠️ Threatening content revealed.\n\nChoose an action:\n" +
-            "1 = Block Sender\n" +
-            "2 = Save Evidence\n" +
-            "3 = Delete Message\n\n" +
-            "Enter 1, 2, or 3:"
-        );
+        setTimeout(() => {
+            const choice = prompt(
+                "⚠ Threatening content revealed.\n\nChoose an action:\n" +
+                "1 = Block Sender\n" +
+                "2 = Save Evidence\n" +
+                "3 = Delete Message\n\n" +
+                "Enter 1, 2, or 3:"
+            );
 
-        if (choice === "1") {
-            alert("Sender blocked (simulation only).");
-        } else if (choice === "2") {
-            const sender = findSenderForNode(node);
-            const timestamp = findTimestampForNode(node);
-            alert("Evidence saved (simulation).");
-        } else if (choice === "3") {
-            node.remove();
-        } else {
-            // no action
-        }
+            if (choice === "1") {
+                alert("Sender blocked (simulation only).");
+            } else if (choice === "2") {
+                const sender = findSenderForNode(node);
+                const timestamp = findTimestampForNode(node);
+                alert("Evidence saved (simulation).");
+            } else if (choice === "3") {
+                node.remove();
+            } else {
+                // no action
+           }
+        }, 1500);
     });
 
     // ================================
