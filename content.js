@@ -82,28 +82,6 @@ function injectControlsFor(node) {
     // Toggle blur when clicking the message itself
     blurred.addEventListener("click", () => {
         blurred.classList.remove("blurred-message");
-        // ---- ALERT MENU ----
-        setTimeout(() => {
-            const choice = prompt(
-                "⚠ Threatening content revealed.\n\nChoose an action:\n" +
-                "1 = Block Sender\n" +
-                "2 = Save Evidence\n" +
-                "3 = Delete Message\n\n" +
-                "Enter 1, 2, or 3:"
-            );
-
-            if (choice === "1") {
-                alert("Sender blocked (simulation only).");
-            } else if (choice === "2") {
-                const sender = findSenderForNode(node);
-                const timestamp = findTimestampForNode(node);
-                alert("Evidence saved (simulation).");
-            } else if (choice === "3") {
-                node.remove();
-            } else {
-                // no action
-           }
-        }, 1500);
     });
 
     // ================================
