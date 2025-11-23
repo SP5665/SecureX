@@ -75,9 +75,9 @@ SecureX is a Chrome extension designed to enhance user safety on Instagram Web b
 
 Developers of SecureX 
 
-Srajal Sahu
-Srishti Pandey
-Shubhi Agarwal
-Satvik Singh
+Srajal Sahu<br>
+Srishti Pandey<br>
+Shubhi Agarwal<br>
+Satvik Singh<br>
 
 ---
