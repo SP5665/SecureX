@@ -77,7 +77,7 @@ Developers of SecureX
 
 Srajal Sahu<br>
 Srishti Pandey<br>
-Shubhi Agarwal
+Shubhi Agarwal<br>
 Satvik Singh<br>
 
 ---
