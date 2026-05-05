@@ -3,6 +3,7 @@
     opacity: 0.4;
 }
 
+
 .unblurred-message {
     filter: none !important;
     opacity: 1 !important;
