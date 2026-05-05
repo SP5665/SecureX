@@ -1,6 +1,7 @@
 // background.js
 // Handles messages from content scripts and stores report metadata in chrome.storage
 
+
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg?.type === "SAVE_REPORT") {
     const report = msg.report; // { id, offender, snippet, timestamp, filename }
